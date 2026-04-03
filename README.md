@@ -144,7 +144,7 @@ The system uses Groq's Llama 3.3 70B model for all analysis tasks:
 ```bash
 git clone https://github.com/subixx/document-analysis-system.git
 cd document-analysis-system
- **2. Create Virtual Environment**
+#### **2. Create Virtual Environment**
 bash
 # Windows
 python -m venv venv
@@ -153,10 +153,10 @@ venv\Scripts\activate
 # macOS/Linux
 python -m venv venv
 source venv/bin/activate
-3. Install Dependencies
+#### **3. Install Dependencies**
 bash
 pip install -r requirements.txt
-**4. Install Tesseract OCR**
+#### **4. Install Tesseract OCR**
 Windows:
 
 powershell
@@ -170,7 +170,7 @@ Linux:
 
 bash
 sudo apt-get install tesseract-ocr
-**5. Configure Environment Variables**
+#### **5. Configure Environment Variables**
 bash
 cp .env.example .env
 Edit .env file:
@@ -181,7 +181,7 @@ API_SECRET_KEY=sk_track2_987654321
 OCR_PROVIDER=tesseract
 DEFAULT_LLM_MODEL=llama-3.3-70b-versatile
 DEBUG=true
-**6. Run the Application**
+#### **6. Run the Application**
 Terminal 1 - API Backend:
 
 bash
@@ -212,7 +212,7 @@ API_SECRET_KEY
 
 OCR_PROVIDER
 
-🔌 API Documentation
+####**🔌 API Documentation**
 Authentication
 All API requests require an API key in the header:
 
@@ -279,7 +279,7 @@ payload = {
 
 response = requests.post(url, json=payload, headers=headers)
 print(response.json())
-📁 **Project Structure**
+#### **Project Structure**
 text
 document-analysis-system/
 ├── src/
@@ -330,10 +330,10 @@ Commit your changes
 Push to the branch
 Open a Pull Request
 
-**License**
+#### **License**
 MIT License - See LICENSE file for details
 
-**Acknowledgments**
+#### **Acknowledgments**
 Groq for providing fast, free LLM inference
 Tesseract OCR for OCR capabilities
 FastAPI for the excellent web framework
