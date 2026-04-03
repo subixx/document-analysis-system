@@ -13,7 +13,7 @@ st.markdown("---")
 with st.sidebar:
     st.markdown("### Configuration")
     
-    BACKEND_URL = "https://documind-backend-o2zy.onrender.com"
+    BACKEND_URL = "https://documind-backend-v97h.onrender.com"
     
     api_url = st.text_input("Backend API URL", value=BACKEND_URL)
     api_key = st.text_input("API Key", value="sk_track2_987654321", type="password")
