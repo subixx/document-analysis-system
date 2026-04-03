@@ -1,4 +1,4 @@
-﻿import streamlit as st
+import streamlit as st
 import requests
 import base64
 import json
@@ -37,13 +37,6 @@ st.markdown("""
         border-radius: 8px;
         margin: 1rem 0;
     }
-    .entity-card {
-        background: white;
-        padding: 1rem;
-        border-radius: 8px;
-        margin: 0.5rem 0;
-        border: 1px solid #e5e7eb;
-    }
     .topic-tag {
         background: #e0e7ff;
         color: #4338ca;
@@ -55,6 +48,22 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+# Retry function for rate limits
+def make_request_with_retry(url, payload, headers, max_retries=3):
+    """Make API request with automatic retry on rate limits"""
+    for attempt in range(max_retries):
+        response = requests.post(url, json=payload, headers=headers, timeout=120)
+        
+        if response.status_code == 429:
+            wait_time = (attempt + 1) * 5  # 5, 10, 15 seconds
+            st.warning(f"Rate limit hit. Waiting {wait_time} seconds... (Attempt {attempt + 1}/{max_retries})")
+            time.sleep(wait_time)
+            continue
+        
+        return response
+    
+    return response
 
 # Header
 st.markdown("""
@@ -71,7 +80,7 @@ with st.sidebar:
     
     api_url = st.text_input(
         "API URL",
-        value="https://documind-api.onrender.com",
+        value="https://document-analysis-system.onrender.com/api/document-analyze",
         help="Your deployed API URL"
     )
     
@@ -119,16 +128,19 @@ if uploaded_file:
             try:
                 file_base64 = base64.b64encode(file_content).decode('utf-8')
                 
-                response = requests.post(
-                    f"{api_url}/api/document-analyze",
-                    json={
-                        "fileName": file_name,
-                        "fileType": file_type,
-                        "fileBase64": file_base64
-                    },
-                    headers={"x-api-key": api_key},
-                    timeout=120
-                )
+                payload = {
+                    "fileName": file_name,
+                    "fileType": file_type,
+                    "fileBase64": file_base64
+                }
+                
+                headers = {
+                    "Content-Type": "application/json",
+                    "x-api-key": api_key
+                }
+                
+                # Use retry function
+                response = make_request_with_retry(api_url, payload, headers)
                 
                 if response.status_code == 200:
                     result = response.json()
@@ -189,6 +201,8 @@ if uploaded_file:
                         mime="application/json"
                     )
                     
+                elif response.status_code == 429:
+                    st.error("Rate limit exceeded. Please wait a moment and try again.")
                 else:
                     st.error(f"API Error: {response.status_code}")
                     st.code(response.text)
