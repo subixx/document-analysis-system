@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: document-analysis-system-api
+    name: documind-backend
     runtime: image
     repo: https://github.com/subixx/document-analysis-system
     plan: free
@@ -13,7 +13,3 @@ services:
         value: sk_track2_987654321
       - key: OCR_PROVIDER
         value: tesseract
-      - key: DEFAULT_LLM_MODEL
-        value: llama-3.3-70b-versatile
-      - key: DEBUG
-        value: false
